@@ -2,7 +2,7 @@ const baseUrl = "http://localhost:8000/todos";
 //const baseUrl = "https://jsonplaceholder.typicode.com/todos";
 
 export interface Todo {
-  id?: number;
+  id?: number | string;
   title: string;
   completed: boolean;
 }

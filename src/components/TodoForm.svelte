@@ -1,4 +1,5 @@
 <script>
+  export let submitTodo;
   import {
     Form,
     FormGroup,
@@ -9,12 +10,13 @@
     Column,
   } from "carbon-components-svelte";
   import { todos } from "../services/store";
-  import { createTodo, loadTodos, updateTodo } from "./services/todoService";
+  import { loadTodos } from "../services/todoService";
   let title = '';
   $: disabled = title.length < 3;
   const submit = async () => {
-      console.log({title: title, completed: false});
-      todos.set(await loadTodos());
+      const todoList = await loadTodos();
+      submitTodo({title: title, completed: false});
+      todos.set(todoList);
       title = '';
   }
 </script>

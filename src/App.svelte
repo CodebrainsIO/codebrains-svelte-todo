@@ -5,7 +5,7 @@
   import { DataTable, Link } from "carbon-components-svelte";
   import TodoForm from "./components/TodoForm.svelte";
   import { todos } from "./services/store";
-  import { createTodo, loadTodos, updateTodo } from "./services/todoService";
+  import { createTodo, loadTodos, updateTodo, deleteTodo } from "./services/todoService";
 import TodoList from "./components/TodoList.svelte";
 
   onMount(async () => {
@@ -17,19 +17,26 @@ import TodoList from "./components/TodoList.svelte";
 
   const submitTodo = async (todo) => {
     await createTodo(todo);
-    await loadTodos();
+    todos.set(await loadTodos());
   };
 
   const updateStatus = async (todo) => {
-    await updateTodo(todo);
-    await loadTodos();
+    let updatedTodo = { ...todo, completed: !todo.completed };
+    console.log("Update Todo Status: ", updatedTodo);
+    await updateTodo(updatedTodo);
+    todos.set(await loadTodos());
+  };
+
+  const deleteTodoItem = async (todo) => {
+    await deleteTodo(todo.id);
+    todos.set(await loadTodos());
   };
 </script>
 
 <main>
   <h2>Codebrains Todos</h2>
-  <TodoForm />
-  <TodoList todos={$todos} />
+  <TodoForm submitTodo={submitTodo}/>
+  <TodoList todos={$todos} updateTodo={updateStatus} deleteTodo={deleteTodoItem} />
 </main>
 
 <style>
